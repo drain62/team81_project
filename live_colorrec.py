@@ -10,7 +10,7 @@ Steps:
 1. Input camera video of webcam
 2. Read the video stream in image frames
 3. Convert imageFrame from BGR to HSV color spaces orrrrr
-4. Define the range of each color to create mask
+4. Define the range of each color to create mask dhdhdhdhh
 5. Morphological Transform: Dilation to remove noise from images
 6. Perform bitwise and between image frame and mask to detect paticular color
 7. Find contour of each correctly colored object and trace around it
