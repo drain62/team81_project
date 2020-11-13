@@ -1,6 +1,7 @@
 import numpy as np
 import cv2
 import sys
+import time
 print(sys.executable)
 print(sys.version)
 
@@ -76,8 +77,9 @@ print("yl = ", yl)
 print("yu = ", yu)
 
 webcam = cv2.VideoCapture(0)
-
+counter = 0
 while(1):
+    counter += 1
     # reads each frame as an image
     _, imageFrame = webcam.read()
     color = ""
@@ -170,3 +172,7 @@ while(1):
         webcam.release()
         cv2.destroyAllWindows()
         break
+
+print("\nOutput Time:", time.process_time())
+print("Frames Processed:", counter)
+print("FPS: ", counter/time.process_time())
