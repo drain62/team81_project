@@ -52,15 +52,13 @@ while True:
     print("Done Takeoff:", time.process_time())
 
     print("Beginning Move:", time.process_time())
-    me.move_forward(100)
+    me.move_backward(400)
     print("Done Move:", time.process_time())
 
-    print("Beginning Move Back:", time.process_time())
-    me.move_back(100)
-    print("Done Move Back:", time.process_time())
-
+    me.flip_left()
     me.stop()
-    if cv2.waitKey(10) & 0xFF == ord('q'):
-        # cv2.destroyAllWindows()
-        me.end()
-        break
+    "if cv2.waitKey(10) & 0xFF == ord('q'):"
+
+
+
+me.end()
