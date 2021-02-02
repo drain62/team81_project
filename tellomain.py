@@ -32,7 +32,7 @@ while True:
     # img = cv2.resize(myFrame, (width, height))
     # cv2.imshow("The Camera", img)
     #cv2.imshow("Drone Camera", imageFrame)
-    """
+
     # if startCounter == 0:
     me.takeoff()
     print(me.get_height())
@@ -40,7 +40,8 @@ while True:
     # me.move_right(20)
     me.move_up(65)
     print(me.get_height())
-    me.move_forward(153)
+    # me.move_forward(153)
+    me.go_xyz_speed(100, 0, 0, 100)
     # me.rotate_counter_clockwise(180)
     # me.move_forward(40)
     #    startCounter = 1
@@ -50,17 +51,15 @@ while True:
     print("Beginning Takeoff:", time.process_time())
     me.takeoff()
     print("Done Takeoff:", time.process_time())
-
+    #me.go_xyz_speed(30, 20, 30, 100)
     print("Beginning Move:", time.process_time())
-    me.move_forward(100)
+    # me.move_forward(100)
     print("Done Move:", time.process_time())
 
     print("Beginning Move Back:", time.process_time())
     me.move_back(100)
     print("Done Move Back:", time.process_time())
-
-    me.stop()
-    if cv2.waitKey(10) & 0xFF == ord('q'):
-        # cv2.destroyAllWindows()
-        me.end()
-        break
+"""
+if cv2.waitKey(10) & 0xFF == ord('q'):
+    # cv2.destroyAllWindows()
+    me.end()
