@@ -81,44 +81,6 @@ print("Battery:", me.get_battery())
 
 # imported Tello-Aruco code:
 
-
-def __send_stick_command(self):
-    pkt = Packet(STICK_CMD, 0x60)
-
-    self.speed = 3.0
-    axis1 = int(1024 + 660.0 * self.right_x)
-    axis2 = int(1024 + 660.0 * self.right_y)
-    axis3 = int(1024 + 660.0 * self.left_y)
-    axis4 = int(1024 + 660.0 * self.left_x)
-    axis5 = int(1024 + 660.0 * self.speed)
-    axis5 = 0x7fff
-
-    packedAxis = (axis1 & 0x7FF) | ((axis2 & 0x7FF) << 11) | (
-        (0x7FF & axis3) << 22) | ((0x7FF & axis4) << 33) | (axis5 << 44)
-    pkt.add_byte((packedAxis >> 0) & 0x00000000ff)
-    pkt.add_byte((packedAxis >> 8) & 0x00000000ff)
-    pkt.add_byte((packedAxis >> 16) & 0x00000000ff)
-
-    pkt.add_byte((packedAxis >> 24) & 0x00000000ff)
-    pkt.add_byte((packedAxis >> 32) & 0x00000000ff)
-    pkt.add_byte((packedAxis >> 40) & 0x00000000ff)
-    # log.debug("stick command: yaw=%4d thr=%4d pit=%4d rol=%4d" %
-    #           (axis4, axis3, axis2, axis1))
-    # log.debug("stick command: yaw=%04x thr=%04x pit=%04x rol=%04x" %
-    #           (axis4, axis3, axis2, axis1))
-    # pkt.add_byte(((axis2 << 11 | axis1) >> 0) & 0xff)
-    # pkt.add_byte(((axis2 << 11 | axis1) >> 8) & 0xff)
-    # pkt.add_byte(((axis3 << 11 | axis2) >> 5) & 0xff)
-    # pkt.add_byte(((axis4 << 11 | axis3) >> 2) & 0xff)
-    # pkt.add_byte(((axis4 << 11 | axis3) >> 10) & 0xff)
-    # pkt.add_byte(((axis4 << 11 | axis3) >> 18) & 0xff)
-    # pkt.add_byte()
-    pkt.add_time()
-    pkt.fixup()
-    log.debug("stick command: %s" % byte_to_hexstring(pkt.get_buffer()))
-    return me.send_packet(pkt)
-
-
 '''
     11 bits(-1024 ~ +1023) x 4 axis = 44 bits
     44 bits will be packed in to 6 bytes(48 bits)
@@ -131,15 +93,15 @@ def __send_stick_command(self):
 '''
 
 
-# me.streamoff()
-# me.streamon()
+me.streamoff()
+me.streamon()
 # camera = me.get_video_capture()
 
 while True:
     # imageFrame = camera.read()
-    # frame_read = me.get_frame_read()
-    # myFrame = frame_read.frame
-    # img = cv2.resize(myFrame, (width, height))
+    frame_read = me.get_frame_read()
+    myFrame = frame_read.frame
+    img = cv2.resize(myFrame, (width, height))
     # cv2.imshow("The Camera", img)
     # cv2.imshow("Drone Camera", imageFrame)
     """
@@ -157,20 +119,22 @@ while True:
 
     # cv2.imshow("The Camera", img)
 """
-    print("Beginning Takeoff:", time.process_time())
-    me.takeoff()
-    print("Done Takeoff:", time.process_time())
+    if startCounter == 0:
+        print("Beginning Takeoff:", time.process_time())
+        me.takeoff()
+        print("Done Takeoff:", time.process_time())
 
-    print("Beginning Move:", time.process_time())
-    me.__send_stick_command()
-    me.move_forward(100)
-    print("Done Move:", time.process_time())
+        print("Beginning Move:", time.process_time())
+        me.__send_stick_command()
+        me.move_forward(100)
+        print("Done Move:", time.process_time())
 
-    print("Beginning Move Back:", time.process_time())
-    me.move_back(100)
-    print("Done Move Back:", time.process_time())
+        print("Beginning Move Back:", time.process_time())
+        me.move_back(100)
+        print("Done Move Back:", time.process_time())
 
-    me.stop()
+    cv2.imshow("The Camera", img)
+
     if cv2.waitKey(10) & 0xFF == ord('q'):
         # cv2.destroyAllWindows()
         me.end()
