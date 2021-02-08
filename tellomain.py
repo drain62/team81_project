@@ -63,8 +63,9 @@ def camera():
         # myFrame = frame_read.frame
         # img = cv2.resize(myFrame, (320, 240))
         _, imageFrame = webcam.read()
-        print(process_frame(imageFrame)[0])
-        cv2.imshow("The Camera", process_frame(imageFrame)[1])
+        result, pFrame = process_frame(imageFrame)
+        print(result)
+        cv2.imshow("The Camera", pFrame)
         i += 1
         if cv2.waitKey(10) & 0xFF == ord('q'):
             cv2.destroyAllWindows()
