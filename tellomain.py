@@ -2,7 +2,7 @@
 from djitellopy import Tello
 import time
 import cv2
-from Aruco import tellopy
+# from Aruco import tellopy
 import threading
 import socket
 import time
@@ -10,6 +10,7 @@ import datetime
 import struct
 import sys
 import os
+
 '''
 from tellopy import crc
 from tellopy import logger
@@ -81,16 +82,16 @@ print("Battery:", me.get_battery())
 
 # imported Tello-Aruco code:
 
-
+'''
 def __send_stick_command(self):
     pkt = Packet(STICK_CMD, 0x60)
 
-    self.speed = 3.0
-    axis1 = int(1024 + 660.0 * self.right_x)
-    axis2 = int(1024 + 660.0 * self.right_y)
-    axis3 = int(1024 + 660.0 * self.left_y)
-    axis4 = int(1024 + 660.0 * self.left_x)
-    axis5 = int(1024 + 660.0 * self.speed)
+    me.speed = 1.0
+    axis1 = int(1024 + 660.0 * me.right_x)
+    axis2 = int(1024 + 660.0 * me.right_y)
+    axis3 = int(1024 + 660.0 * me.left_y)
+    axis4 = int(1024 + 660.0 * me.left_x)
+    axis5 = int(1024 + 660.0 * me.speed)
     axis5 = 0x7fff
 
     packedAxis = (axis1 & 0x7FF) | ((axis2 & 0x7FF) << 11) | (
@@ -119,7 +120,7 @@ def __send_stick_command(self):
     return me.send_packet(pkt)
 
 
-'''
+
     11 bits(-1024 ~ +1023) x 4 axis = 44 bits
     44 bits will be packed in to 6 bytes(48 bits)
                 axis4      axis3      axis2      axis1
@@ -162,7 +163,7 @@ while True:
     print("Done Takeoff:", time.process_time())
 
     print("Beginning Move:", time.process_time())
-    me.__send_stick_command()
+    # me.__send_stick_command()
     me.move_forward(100)
     print("Done Move:", time.process_time())
 
