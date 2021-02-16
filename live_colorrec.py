@@ -78,7 +78,10 @@ red_upper = np.array(ru, np.uint8)
 yellow_lower = np.array(yl, np.uint8)
 yellow_upper = np.array(yu, np.uint8)
 
-webcam = cv2.VideoCapture(0)
+webcam = cv2.VideoCapture("/Users/hfrey/Desktop/telloCamera.mp4")
+
+
+# webcam = cv2.VideoCapture(0)
 counter = 0
 max_red = 0
 max_blue = 0
@@ -97,7 +100,8 @@ while(1):
     if(flag < numframes):
         print("\n\nFrame Start Time:", time_now)
     # reads each frame as an image
-    _, imageFrame = webcam.read()
+    ret, imageFrame = webcam.read()
+
     color = ""
     # make a frame in HSV color scheme
     hsvFrame = cv2.cvtColor(imageFrame, cv2.COLOR_BGR2HSV)
@@ -171,7 +175,7 @@ while(1):
 
     # show the result
     cv2.imshow("Multiple Color Detection in Real-Time", imageFrame)
-    cv2.imshow('redmask', red_mask)
+    # cv2.imshow('redmask', red_mask)
 
     # use the "q" key to exit the webcam view
     if cv2.waitKey(10) & 0xFF == ord('q'):
