@@ -28,11 +28,11 @@ while True:
 
     print("Beginning Move:", time.process_time())
     me.__send_stick_command()
-    me.move_forward(100)
+    me.forward(100)
     print("Done Move:", time.process_time())
 
     print("Beginning Move Back:", time.process_time())
-    me.move_back(100)
+    me.backward(100)
     print("Done Move Back:", time.process_time())
 
     me.stop()

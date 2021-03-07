@@ -3,66 +3,7 @@ from djitellopy import Tello
 import time
 import cv2
 # from Aruco import tellopy
-import threading
-import socket
-import time
-import datetime
-import struct
-import sys
-import os
 
-'''
-from tellopy import crc
-from tellopy import logger
-from tellopy import event
-from tellopy import state
-from tellopy import error
-from tellopy import video_stream
-from utils import *
-from protocol import *
-from tellopy import dispatcher
-from bytebuffer import *
-log = logger.Logger('Tello')
-
-
-
-class Tello(object):
-    EVENT_CONNECTED = event.Event('connected')
-    EVENT_WIFI = event.Event('wifi')
-    EVENT_LIGHT = event.Event('light')
-    EVENT_FLIGHT_DATA = event.Event('fligt_data')
-    EVENT_LOG = event.Event('log')
-    EVENT_TIME = event.Event('time')
-    EVENT_VIDEO_FRAME = event.Event('video frame')
-    EVENT_VIDEO_DATA = event.Event('video data')
-    EVENT_DISCONNECTED = event.Event('disconnected')
-    EVENT_FILE_RECEIVED = event.Event('file received')
-    # internal events
-    __EVENT_CONN_REQ = event.Event('conn_req')
-    __EVENT_CONN_ACK = event.Event('conn_ack')
-    __EVENT_TIMEOUT = event.Event('timeout')
-    __EVENT_QUIT_REQ = event.Event('quit_req')
-
-    # for backward comaptibility
-    CONNECTED_EVENT = EVENT_CONNECTED
-    WIFI_EVENT = EVENT_WIFI
-    LIGHT_EVENT = EVENT_LIGHT
-    FLIGHT_EVENT = EVENT_FLIGHT_DATA
-    LOG_EVENT = EVENT_LOG
-    TIME_EVENT = EVENT_TIME
-    VIDEO_FRAME_EVENT = EVENT_VIDEO_FRAME
-
-    STATE_DISCONNECTED = state.State('disconnected')
-    STATE_CONNECTING = state.State('connecting')
-    STATE_CONNECTED = state.State('connected')
-    STATE_QUIT = state.State('quit')
-
-    LOG_ERROR = logger.LOG_ERROR
-    LOG_WARN = logger.LOG_WARN
-    LOG_INFO = logger.LOG_INFO
-    LOG_DEBUG = logger.LOG_DEBUG
-    LOG_ALL = logger.LOG_ALL
-'''
 
 width = 320
 height = 240
@@ -82,20 +23,16 @@ print("Battery:", me.get_battery())
 
 # imported Tello-Aruco code:
 
-'''
- 
-'''
 
-
-me.streamoff()
-me.streamon()
+# me.streamoff()
+# me.streamon()
 # camera = me.get_video_capture()
 
 while True:
     # imageFrame = camera.read()
-    frame_read = me.get_frame_read()
-    myFrame = frame_read.frame
-    img = cv2.resize(myFrame, (width, height))
+    # frame_read = me.get_frame_read()
+    # myFrame = frame_read.frame
+    # img = cv2.resize(myFrame, (width, height))
     # cv2.imshow("The Camera", img)
     # cv2.imshow("Drone Camera", imageFrame)
     """
@@ -113,19 +50,20 @@ while True:
 
     # cv2.imshow("The Camera", img)
 """
-    if startCounter == 0:
-        print("Beginning Takeoff:", time.process_time())
-        me.takeoff()
-        print("Done Takeoff:", time.process_time())
+    print("Beginning Takeoff:", time.process_time())
+    me.takeoff()
+    print("Done Takeoff:", time.process_time())
 
-        print("Beginning Move:", time.process_time())
-        me.__send_stick_command()
-        me.move_forward(100)
-        print("Done Move:", time.process_time())
+    print("Beginning Move:", time.process_time())
+    # me.__send_stick_command()
+    me.move_forward(100)
+    print("Done Move:", time.process_time())
 
+    print("Beginning Move Back:", time.process_time())
+    me.move_back(100)
+    print("Done Move Back:", time.process_time())
 
-    cv2.imshow("The Camera", img)
-
+    me.stop()
     if cv2.waitKey(10) & 0xFF == ord('q'):
         # cv2.destroyAllWindows()
         me.end()
