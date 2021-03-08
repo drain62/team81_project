@@ -26,7 +26,7 @@ def translate():
     Z = [0, 0, 0]
 
     A = tf.affines.compose(T, R, Z)
-    print(A)
+    print(type(A))
 
 
 if __name__ == '__main__':
