@@ -85,8 +85,12 @@ webcam = cv2.VideoCapture("/Users/hfrey/Desktop/telloCamera.mp4")
 # webcam = cv2.VideoCapture(0)
 =======
 # webcam = cv2.VideoCapture(0)
+<<<<<<< HEAD
 webcam = cv2.VideoCapture("C:/Users/hfrey/Desktop/telloCamera.mp4")
 >>>>>>> f1e25f6cb97f2966290c69c46fb09189ee1724ad
+=======
+webcam = cv2.VideoCapture(0)
+>>>>>>> 21df3ecc3e32317e373adedb5fc9dfbed91ddb2a
 counter = 0
 max_red = 0
 max_blue = 0
@@ -129,10 +133,10 @@ while(1):
         print("\n\nDone making masks at time:", time.process_time())
         print("Time from start to mask setup:", time.process_time() - time_now)
 
-    res_blue = cv2.bitwise_and(imageFrame, imageFrame, mask=blue_mask)
-    res_green = cv2.bitwise_and(imageFrame, imageFrame, mask=green_mask)
-    res_red = cv2.bitwise_and(imageFrame, imageFrame, mask=red_mask)
-    res_yellow = cv2.bitwise_and(imageFrame, imageFrame, mask=yellow_mask)
+    # res_blue = cv2.bitwise_and(imageFrame, imageFrame, mask=blue_mask)
+    # res_green = cv2.bitwise_and(imageFrame, imageFrame, mask=green_mask)
+    # res_red = cv2.bitwise_and(imageFrame, imageFrame, mask=red_mask)
+    # res_yellow = cv2.bitwise_and(imageFrame, imageFrame, mask=yellow_mask)
 
     contours_b, hierarchy_b = cv2.findContours(blue_mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     contours_g, hierarchy_g = cv2.findContours(green_mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
@@ -180,7 +184,11 @@ while(1):
 
     # show the result
     cv2.imshow("Multiple Color Detection in Real-Time", imageFrame)
+<<<<<<< HEAD
     # cv2.imshow('redmask', red_mask)
+=======
+    cv2.imshow('bluemask', blue_mask)
+>>>>>>> 21df3ecc3e32317e373adedb5fc9dfbed91ddb2a
 
     # use the "q" key to exit the webcam view
     if cv2.waitKey(10) & 0xFF == ord('q'):

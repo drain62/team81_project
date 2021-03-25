@@ -62,11 +62,6 @@ max_yellow = 0
 flag = 0
 numframes = 5
 
-global control
-control = cv2.imread('/Users/jamesramirez/Desktop/circle.jpg', cv2.IMREAD_GRAYSCALE)
-control = cv2.resize(control, (int(control.shape[1] / 2), int(control.shape[0] / 2)))
-_, control = cv2.threshold(control, 128, 255, cv2.THRESH_BINARY)
-
 
 def process_frame(frame, control):
 
@@ -177,12 +172,7 @@ def process_frame(frame, control):
     for pic_b, contour_b in enumerate(contours_b):
         area_b = cv2.contourArea(contour_b)
 
-        comp = np.zeros((int(frame.shape[0]), int(frame.shape[1])))
-        cv2.fillPoly(comp, pts=[contour_b], color=(255, 255, 255))
-        # _, comp = cv2.threshold(comp, 128, 255, cv2.THRESH_BINARY)
-        d1 = cv2.matchShapes(comp, control, cv2.CONTOURS_MATCH_I2, 0)
-
-        if d1 < 0.05 and area_b > 750:
+        if area_b > 750:
             # print(d1)
             cv2.drawContours(imageFrame, contours_b, pic_b, (255, 0, 0), 3)
 
@@ -216,14 +206,9 @@ def process_frame(frame, control):
     for pic_g, contour_g in enumerate(contours_g):
         area_g = cv2.contourArea(contour_g)
 
-        comp = np.zeros((int(frame.shape[0]), int(frame.shape[1])))
-        cv2.fillPoly(comp, pts=[contour_g], color=(255, 255, 255))
-        # _, comp = cv2.threshold(comp, 128, 255, cv2.THRESH_BINARY)
-        d1 = cv2.matchShapes(comp, control, cv2.CONTOURS_MATCH_I2, 0)
-
         # approx_b = cv2.approxPolyDP(contour_b, 0.01*cv2.arcLength(contour_b, True), True)
         # if area_b > 750 and len(approx_b) > 15:
-        if d1 < 0.05 and area_g > 750:
+        if area_g > 750:
             # print(d1)
             cv2.drawContours(imageFrame, contours_g, pic_g, (0, 255, 0), 3)
             M = cv2.moments(contour_g)
@@ -256,14 +241,10 @@ def process_frame(frame, control):
     for pic_r, contour_r in enumerate(contours_r):
         area_r = cv2.contourArea(contour_r)
 
-        comp = np.zeros((int(frame.shape[0]), int(frame.shape[1])))
-        cv2.fillPoly(comp, pts=[contour_r], color=(255, 255, 255))
-        # _, comp = cv2.threshold(comp, 128, 255, cv2.THRESH_BINARY)
-        d1 = cv2.matchShapes(comp, control, cv2.CONTOURS_MATCH_I2, 0)
         # print(d1)
         # approx_b = cv2.approxPolyDP(contour_r, 0.01*cv2.arcLength(contour_r, True), True)
         # if area_r > 750 and len(approx_r) > 15:
-        if d1 < 0.075 and area_r > 750:
+        if area_r > 750:
             print(d1)
             cv2.drawContours(imageFrame, contours_r, pic_r, (0, 0, 255), 3)
             M = cv2.moments(contour_r)
@@ -296,14 +277,9 @@ def process_frame(frame, control):
     for pic_y, contour_y in enumerate(contours_y):
         area_y = cv2.contourArea(contour_y)
 
-        comp = np.zeros((int(frame.shape[0]), int(frame.shape[1])))
-        cv2.fillPoly(comp, pts=[contour_y], color=(255, 255, 255))
-        # _, comp = cv2.threshold(comp, 128, 255, cv2.THRESH_BINARY)
-        d1 = cv2.matchShapes(comp, control, cv2.CONTOURS_MATCH_I2, 0)
-
         # approx_b = cv2.approxPolyDP(contour_b, 0.01*cv2.arcLength(contour_b, True), True)
         # if area_b > 750 and len(approx_b) > 15:
-        if d1 < 0.075 and area_y > 750:
+        if area_y > 750:
             # print(d1)
             cv2.drawContours(imageFrame, contours_y, pic_y, (50, 100, 100), 3)
             M = cv2.moments(contour_y)
