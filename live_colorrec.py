@@ -78,10 +78,15 @@ red_upper = np.array(ru, np.uint8)
 yellow_lower = np.array(yl, np.uint8)
 yellow_upper = np.array(yu, np.uint8)
 
+<<<<<<< HEAD
 webcam = cv2.VideoCapture("/Users/hfrey/Desktop/telloCamera.mp4")
 
 
 # webcam = cv2.VideoCapture(0)
+=======
+# webcam = cv2.VideoCapture(0)
+webcam = cv2.VideoCapture("C:/Users/hfrey/Desktop/telloCamera.mp4")
+>>>>>>> f1e25f6cb97f2966290c69c46fb09189ee1724ad
 counter = 0
 max_red = 0
 max_blue = 0

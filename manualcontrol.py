@@ -44,4 +44,5 @@ while True:
     elif key == ord('f'):
         tello.move_down(30)
 
-tello.land()
+cv2.destroyAllWindows()
+tello.end()
