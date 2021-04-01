@@ -63,13 +63,12 @@ flag = 0
 numframes = 5
 
 
-def process_frame(frame, control):
+def landing_frame(frame):
 
     # global control
     # control = cv2.imread(r'C:\Users\hfrey\Desktop\controlimage.jpg', cv2.IMREAD_GRAYSCALE)
     # control = cv2.resize(control, (int(control.shape[1] / 2), int(control.shape[0] / 2)))
     # _, control = cv2.threshold(control, 128, 255, cv2.THRESH_BINARY)
-    results = np.array([[-1] * 3] * 3)
 
     blue_l = [185, 30, 40]
     blue_u = [240, 100, 100]
@@ -126,10 +125,9 @@ def process_frame(frame, control):
     height = imageFrame.shape[0]
     width = imageFrame.shape[1]
 
-    lineX = int(width/3) + 20
-    twolineX = int(width * 2/3) - 20
-    lineY = int(height/3)
-    twolineY = int(height * 2/3) - 25
+    lineX = int(width/2) - 10
+    twolineX = int(width/2) + 10
+    lineY = int(height/2) + 30
 
     hsvFrame = cv2.cvtColor(imageFrame, cv2.COLOR_BGR2HSV)
     #rgbFrame = cv2.cvtColor(imageFrame, cv2.COLOR_BGR2RGB)
@@ -158,7 +156,7 @@ def process_frame(frame, control):
     red_mask = cv2.medianBlur(red_mask, 3)
     yellow_mask = cv2.medianBlur(yellow_mask, 5)
     red_mask2 = cv2.medianBlur(red_mask2, 3)
-    #rgb_red_mask = cv2.medianBlur(rgb_red_mask, 5)
+    # rgb_red_mask = cv2.medianBlur(rgb_red_mask, 5)
 
     final_red_mask = (red_mask | red_mask2)  # & rgb_red_mask
 
@@ -169,153 +167,47 @@ def process_frame(frame, control):
     contours_y, hierarchy_y = cv2.findContours(yellow_mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     # for each contour, if it's large enough draw them onto the image
 
-    for pic_b, contour_b in enumerate(contours_b):
-        area_b = cv2.contourArea(contour_b)
+    allColorsArray = np.concatenate((contours_b, contours_g, contours_r, contours_y), axis=None)
 
-        if area_b > 750:
-            # print(d1)
-            cv2.drawContours(imageFrame, contours_b, pic_b, (255, 0, 0), 3)
+    biggest_area = 0
 
-            M = cv2.moments(contour_b)
-            cX = int(M["m10"] / M["m00"])
-            cY = int(M["m01"] / M["m00"])
-            # print("Center Coordinates: ", cX, ", ", cY)
-            cv2.circle(imageFrame, (cX, cY), 7, (255, 255, 255), -1)
-            if cX < lineX:
-                if cY < lineY:
-                    results[0][0] = 1
-                elif cY > lineY and cY < twolineY:
-                    results[1][0] = 1
-                else:
-                    results[2][0] = 1
-            elif cX < twolineX and cX >= lineX:
-                if cY < lineY:
-                    results[0][1] = 1
-                elif cY > lineY and cY < twolineY:
-                    results[1][1] = 1
-                else:
-                    results[2][1] = 1
-            else:
-                if cY < lineY:
-                    results[0][2] = 1
-                elif cY > lineY and cY < twolineY:
-                    results[1][2] = 1
-                else:
-                    results[2][2] = 1
+    for pic_a, contour_a in enumerate(contours_b) + enumerate(contours_g) + enumerate(contours_r) + enumerate(contours_y):
+        area = cv2.contourArea(contour_a)
 
-    for pic_g, contour_g in enumerate(contours_g):
-        area_g = cv2.contourArea(contour_g)
+        if area > 200 and area < 1000:
+            if area >= biggest_area:
+                biggest_area = area
+                found_contour = contour_a
+            cv2.drawContours(imageFrame, contour_a, pic_a, (125, 125, 125), 3)
 
-        # approx_b = cv2.approxPolyDP(contour_b, 0.01*cv2.arcLength(contour_b, True), True)
-        # if area_b > 750 and len(approx_b) > 15:
-        if area_g > 750:
-            # print(d1)
-            cv2.drawContours(imageFrame, contours_g, pic_g, (0, 255, 0), 3)
-            M = cv2.moments(contour_g)
-            cX = int(M["m10"] / M["m00"])
-            cY = int(M["m01"] / M["m00"])
-            # print("Center Coordinates: ", cX, ", ", cY)
-            cv2.circle(imageFrame, (cX, cY), 7, (255, 255, 255), -1)
-            if cX < lineX:
-                if cY < lineY:
-                    results[0][0] = 2
-                elif cY > lineY and cY < twolineY:
-                    results[1][0] = 2
-                else:
-                    results[2][0] = 2
-            elif cX < twolineX and cX >= lineX:
-                if cY < lineY:
-                    results[0][1] = 2
-                elif cY > lineY and cY < twolineY:
-                    results[1][1] = 2
-                else:
-                    results[2][1] = 2
-            else:
-                if cY < lineY:
-                    results[0][2] = 2
-                elif cY > lineY and cY < twolineY:
-                    results[1][2] = 2
-                else:
-                    results[2][2] = 2
+    M = cv2.moments(found_contour)
+    cX = int(M["m10"] / M["m00"])
+    cY = int(M["m01"] / M["m00"])
 
-    for pic_r, contour_r in enumerate(contours_r):
-        area_r = cv2.contourArea(contour_r)
+    cv2.circle(imageFrame, (cX, cY), 7, (255, 255, 255), -1)
 
-        # print(d1)
-        # approx_b = cv2.approxPolyDP(contour_r, 0.01*cv2.arcLength(contour_r, True), True)
-        # if area_r > 750 and len(approx_r) > 15:
-        if area_r > 750:
-            print(d1)
-            cv2.drawContours(imageFrame, contours_r, pic_r, (0, 0, 255), 3)
-            M = cv2.moments(contour_r)
-            cX = int(M["m10"] / M["m00"])
-            cY = int(M["m01"] / M["m00"])
-            # print("Center Coordinates: ", cX, ", ", cY)
-            cv2.circle(imageFrame, (cX, cY), 7, (255, 255, 255), -1)
-            if cX < lineX:
-                if cY < lineY:
-                    results[0][0] = 3
-                elif cY > lineY and cY < twolineY:
-                    results[1][0] = 3
-                else:
-                    results[2][0] = 3
-            elif cX < twolineX and cX >= lineX:
-                if cY < lineY:
-                    results[0][1] = 3
-                elif cY > lineY and cY < twolineY:
-                    results[1][1] = 3
-                else:
-                    results[2][1] = 3
-            else:
-                if cY < lineY:
-                    results[0][2] = 3
-                elif cY > lineY and cY < twolineY:
-                    results[1][2] = 3
-                else:
-                    results[2][2] = 3
-
-    for pic_y, contour_y in enumerate(contours_y):
-        area_y = cv2.contourArea(contour_y)
-
-        # approx_b = cv2.approxPolyDP(contour_b, 0.01*cv2.arcLength(contour_b, True), True)
-        # if area_b > 750 and len(approx_b) > 15:
-        if area_y > 750:
-            # print(d1)
-            cv2.drawContours(imageFrame, contours_y, pic_y, (50, 100, 100), 3)
-            M = cv2.moments(contour_y)
-            cX = int(M["m10"] / M["m00"])
-            cY = int(M["m01"] / M["m00"])
-            # print("Center Coordinates: ", cX, ", ", cY)
-            cv2.circle(imageFrame, (cX, cY), 7, (255, 255, 255), -1)
-            if cX < lineX:
-                if cY < lineY:
-                    results[0][0] = 4
-                elif cY > lineY and cY < twolineY:
-                    results[1][0] = 4
-                else:
-                    results[2][0] = 4
-            elif cX < twolineX and cX >= lineX:
-                if cY < lineY:
-                    results[0][1] = 4
-                elif cY > lineY and cY < twolineY:
-                    results[1][1] = 4
-                else:
-                    results[2][1] = 4
-            else:
-                if cY < lineY:
-                    results[0][2] = 4
-                elif cY > lineY and cY < twolineY:
-                    results[1][2] = 4
-                else:
-                    results[2][2] = 4
+    move = ""
+    if cY <= lineY:
+        if cX < lineX:
+            move = "left"
+        elif cX > twolineX:
+            move = "right"
+        else:
+            move = "forward"
+    else:
+        if cX < lineX:
+            move = "left"
+        elif cX > twolineX:
+            move = "right"
+        else:
+            move = "land"
 
     cv2.line(imageFrame, (lineX, 0), (lineX, height), (255, 255, 255), 3)
     cv2.line(imageFrame, (twolineX, 0), (twolineX, height), (255, 255, 255), 3)
 
     cv2.line(imageFrame, (0, lineY), (width, lineY), (255, 255, 255), 3)
-    cv2.line(imageFrame, (0, twolineY), (width, twolineY), (255, 255, 255), 3)
-    return [results, imageFrame, final_red_mask]
-    # return [results, imageFrame]
+
+    return [imageFrame, move]
 
 
 def camera(q):
