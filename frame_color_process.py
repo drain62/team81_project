@@ -76,13 +76,13 @@ def process_frame(frame, control):
     # _, control = cv2.threshold(control, 128, 255, cv2.THRESH_BINARY)
     results = np.array([[-1] * 3] * 3)
 
-    blue_l = [185, 30, 40]
-    blue_u = [240, 100, 100]
+    blue_l = [180, 30, 40]
+    blue_u = [245, 100, 100]
     bl = colorConvert(blue_l)
     bu = colorConvert(blue_u)
 
-    green_l = [80, 20, 25]
-    green_u = [170, 100, 100]
+    green_l = [80, 40, 40]
+    green_u = [180, 100, 100]
     gl = colorConvert(green_l)
     gu = colorConvert(green_u)
 
@@ -99,7 +99,7 @@ def process_frame(frame, control):
     rgb_red_l = [260, 0, 0]
     rgb_red_u = [360, 100, 100]
 
-    yellow_l = [35, 15, 15]
+    yellow_l = [50, 50, 60]
     yellow_u = [75, 100, 100]
     yl = colorConvert(yellow_l)
     yu = colorConvert(yellow_u)
@@ -182,7 +182,7 @@ def process_frame(frame, control):
         # _, comp = cv2.threshold(comp, 128, 255, cv2.THRESH_BINARY)
         d1 = cv2.matchShapes(comp, control, cv2.CONTOURS_MATCH_I2, 0)
 
-        if d1 < 0.05 and area_b > 750:
+        if d1 < 0.1 and area_b > 300:
             # print(d1)
             cv2.drawContours(imageFrame, contours_b, pic_b, (255, 0, 0), 3)
 
@@ -223,7 +223,7 @@ def process_frame(frame, control):
 
         # approx_b = cv2.approxPolyDP(contour_b, 0.01*cv2.arcLength(contour_b, True), True)
         # if area_b > 750 and len(approx_b) > 15:
-        if d1 < 0.05 and area_g > 750:
+        if d1 < 0.1 and area_g > 300:
             # print(d1)
             cv2.drawContours(imageFrame, contours_g, pic_g, (0, 255, 0), 3)
             M = cv2.moments(contour_g)
@@ -263,7 +263,7 @@ def process_frame(frame, control):
         # print(d1)
         # approx_b = cv2.approxPolyDP(contour_r, 0.01*cv2.arcLength(contour_r, True), True)
         # if area_r > 750 and len(approx_r) > 15:
-        if d1 < 0.075 and area_r > 750:
+        if d1 < 0.1 and area_r > 300:
             print(d1)
             cv2.drawContours(imageFrame, contours_r, pic_r, (0, 0, 255), 3)
             M = cv2.moments(contour_r)
@@ -303,7 +303,7 @@ def process_frame(frame, control):
 
         # approx_b = cv2.approxPolyDP(contour_b, 0.01*cv2.arcLength(contour_b, True), True)
         # if area_b > 750 and len(approx_b) > 15:
-        if d1 < 0.075 and area_y > 750:
+        if d1 < 0.1 and area_y > 300:
             # print(d1)
             cv2.drawContours(imageFrame, contours_y, pic_y, (50, 100, 100), 3)
             M = cv2.moments(contour_y)
@@ -338,7 +338,7 @@ def process_frame(frame, control):
 
     cv2.line(imageFrame, (0, lineY), (width, lineY), (255, 255, 255), 3)
     cv2.line(imageFrame, (0, twolineY), (width, twolineY), (255, 255, 255), 3)
-    return [results, imageFrame, final_red_mask]
+    return [results, imageFrame]
     # return [results, imageFrame]
 
 
