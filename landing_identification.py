@@ -167,26 +167,80 @@ def landing_frame(frame):
     contours_y, hierarchy_y = cv2.findContours(yellow_mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     # for each contour, if it's large enough draw them onto the image
 
-    allColorsArray = np.concatenate((contours_b, contours_g, contours_r, contours_y), axis=None)
+    # contours_b = np.array(contours_b, np.uint32)
+    # contours_g = np.array(contours_g, np.uint32)
+    # contours_r = np.array(contours_r, np.uint32)
+    # contours_y = np.array(contours_y, np.uint32)
 
+    allColors = []
+    allColors.extend(contours_b)
+    allColors.extend(contours_g)
+    allColors.extend(contours_r)
+    allColors.extend(contours_y)
+    # print(allColors)
     biggest_area = 0
 
-    for pic_a, contour_a in enumerate(contours_b) + enumerate(contours_g) + enumerate(contours_r) + enumerate(contours_y):
-        area = cv2.contourArea(contour_a)
+    biggest_blue = 0
+    for pic_b, contour_b in enumerate(contours_b):
+        area = cv2.contourArea(contour_b)
 
-        if area > 200 and area < 1000:
-            if area >= biggest_area:
-                biggest_area = area
-                found_contour = contour_a
-            cv2.drawContours(imageFrame, contour_a, pic_a, (125, 125, 125), 3)
+        if area > 100 and area < 10000:
+            if area >= biggest_blue:
+                biggest_blue = area
+                found_blue = contour_b
+            cv2.drawContours(imageFrame, contour_b, -1, (255, 0, 0), 3)
+
+    biggest_green = 0
+    for pic_g, contour_g in enumerate(contours_g):
+        area = cv2.contourArea(contour_g)
+
+        if area > 100 and area < 10000:
+            if area >= biggest_green:
+                biggest_green = area
+                found_green = contour_g
+            cv2.drawContours(imageFrame, contour_g, -1, (0, 255, 0), 3)
+
+    biggest_red = 0
+    for pic_r, contour_r in enumerate(contours_r):
+        area = cv2.contourArea(contour_r)
+
+        if area > 100 and area < 10000:
+            if area >= biggest_red:
+                biggest_red = area
+                found_red = contour_r
+            cv2.drawContours(imageFrame, contour_r, -1, (0, 0, 255), 3)
+
+    biggest_yellow = 0
+    # for pic_y, contour_y in enumerate(contours_y):
+    #     area = cv2.contourArea(contour_y)
+    #
+    #     if area > 200 and area < 1000:
+    #         if area >= biggest_yellow:
+    #             biggest_yellow = area
+    #             found_yellow = contour_y
+    #         cv2.drawContours(imageFrame, contour_y, pic_y, (125, 125, 255), 3)
+
+    move = ""
+    areas = [biggest_blue, biggest_green, biggest_red, biggest_yellow]
+    biggest = max(areas)
+    if biggest == 0:
+        return [move, imageFrame]
+    elif biggest == biggest_blue:
+        found_contour = found_blue
+    elif biggest == biggest_green:
+        found_contour = found_green
+    elif biggest == biggest_red:
+        found_contour = found_red
+    elif biggest == biggest_yellow:
+        found_contour = found_yellow
 
     M = cv2.moments(found_contour)
     cX = int(M["m10"] / M["m00"])
     cY = int(M["m01"] / M["m00"])
 
+    cv2.drawContours(imageFrame, found_contour, -1, (255, 255, 255), 3)
     cv2.circle(imageFrame, (cX, cY), 7, (255, 255, 255), -1)
 
-    move = ""
     if cY <= lineY:
         if cX < lineX:
             move = "left"
@@ -207,7 +261,7 @@ def landing_frame(frame):
 
     cv2.line(imageFrame, (0, lineY), (width, lineY), (255, 255, 255), 3)
 
-    return [imageFrame, move]
+    return [move, imageFrame]
 
 
 def camera(q):
@@ -220,13 +274,13 @@ def camera(q):
         _, frame = cam.read()
         cv2.imshow("Normal Cam", frame)
         # result, pFrame, bm, gm, ym, rm = process_frame(frame, control)
-        result, pFrame, rm = process_frame(frame, control)
+        pFrame, result = landing_frame(frame)
         q.put(result)
 
-        # print("Results:", result)
+        print("Results:", result)
         cv2.imshow("Process", pFrame)
         # cv2.imshow("blue", bm)
-        cv2.imshow("red", rm)
+        #cv2.imshow("red", rm)
         # cv2.imshow("yellow", ym)
         # cv2.imshow("green", gm)
         # if q.get() == [1] and thisone:
