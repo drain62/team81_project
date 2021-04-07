@@ -12,7 +12,7 @@ from landing_identification import landing_frame
 from djitellopy import Tello
 
 global control
-control = cv2.imread(r'C:\Users\hfrey\Desktop\newcontrol1.jpg', cv2.IMREAD_GRAYSCALE)
+control = cv2.imread(r'C:\Users\hfrey\Desktop\control.jpg', cv2.IMREAD_GRAYSCALE)
 control = cv2.resize(control, (int(control.shape[1] / 2), int(control.shape[0] / 2)))
 _, control = cv2.threshold(control, 128, 255, cv2.THRESH_BINARY)
 global q
@@ -141,14 +141,30 @@ def main():
     # Yellow - 4
     order = [3, 4, 1, 2]
     LUarray = [-1] * 15
+    LUarray = numpy.array(LUarray)
     MUarray = [-1] * 15
+    MUarray = numpy.array(MUarray)
     RUarray = [-1] * 15
+    RUarray = numpy.array(RUarray)
     LMarray = [-1] * 15
+    LMarray = numpy.array(LMarray)
     MMarray = [-1] * 15
+    MMarray = numpy.array(MMarray)
     RMarray = [-1] * 15
+    RMarray = numpy.array(RMarray)
     LLarray = [-1] * 15
+    LLarray = numpy.array(LLarray)
     MLarray = [-1] * 15
+    MLarray = numpy.array(MLarray)
     RLarray = [-1] * 15
+    RLarray = numpy.array(RLarray)
+
+    height_front = 110
+    # height_front = 69
+    height_mid = 150
+    # height_mid = 114
+    height_back = 185
+    # height_back = 138
 
     me = Tello()
     drone_setup()
@@ -161,7 +177,7 @@ def main():
     print("here")
     me.go_xyz_speed_yaw_mid(0, 0, 100, 100, 0, 8, 7)
     # me.go_xyz_speed_mid(0, 0, 100, 100, 1)
-    me.move_up(100)
+    me.move_up(110)
     time.sleep(1.5)
     p1.start()
     while p1.is_alive() and j < 15:
@@ -181,26 +197,118 @@ def main():
         j += 1
         print("Result:", iteration)
 
-    modeLU = stats.mode(LUarray)
-    modeMU = stats.mode(MUarray)
-    modeRU = stats.mode(RUarray)
+    allArrays = [LUarray, MUarray, RUarray, LMarray, MMarray, RMarray, LLarray, MLarray, RLarray]
+    results = [-1] * 9
+    for count, array in enumerate(allArrays):
+        if numpy.count_nonzero(array == -1) < 8:
+            for i in range(1, 5):
+                if i in array:
+                    results[count] = i
+                    break
+        else:
+            results[count] = -1
 
-    modeLM = stats.mode(LMarray)
-    modeMM = stats.mode(MMarray)
-    modeRM = stats.mode(RMarray)
+    solution = [[results[0], results[1], results[2]], [results[3], results[4],
+                                                       results[5]], [results[6], results[7], results[8]]]
 
-    modeLL = stats.mode(LLarray)
-    modeML = stats.mode(MLarray)
-    modeRL = stats.mode(RLarray)
-    solution = [[int(modeLU[0]), int(modeMU[0]), int(modeRU[0])], [int(modeLM[0]), int(
-        modeMM[0]), int(modeRM[0])], [int(modeLL[0]), int(modeML[0]), int(modeRL[0])]]
+    # modeLU = stats.mode(LUarray)
+    # modeMU = stats.mode(MUarray)
+    # modeRU = stats.mode(RUarray)
+    #
+    # modeLM = stats.mode(LMarray)
+    # modeMM = stats.mode(MMarray)
+    # modeRM = stats.mode(RMarray)
+    #
+    # modeLL = stats.mode(LLarray)
+    # modeML = stats.mode(MLarray)
+    # modeRL = stats.mode(RLarray)
+    # solution = [[int(modeLU[0]), int(modeMU[0]), int(modeRU[0])], [int(modeLM[0]), int(
+    #     modeMM[0]), int(modeRM[0])], [int(modeLL[0]), int(modeML[0]), int(modeRL[0])]]
+    #
+    #
+    #
+    # if numpy.count_nonzero(LUarray == -1) < 8:
+    #     for i in range(1, 5):
+    #         if i in LUarray:
+    #             LU = i
+    #             break
+    # else:
+    #     LU = -1
+    #
+    # if numpy.count_nonzero(MUarray == -1) < 8:
+    #     for i in range(1, 5):
+    #         if i in MUarray:
+    #             MU = i
+    #             break
+    # else:
+    #     MU = -1
+    #
+    # if numpy.count_nonzero(RUarray == -1) < 8:
+    #     for i in range(1, 5):
+    #         if i in RUarray:
+    #             RU = i
+    #             break
+    # else:
+    #     RU = -1
+    #
+    # if numpy.count_nonzero(LMarray == -1) < 8:
+    #     for i in range(1, 5):
+    #         if i in LMarray:
+    #             LM = i
+    #             break
+    # else:
+    #     LM = -1
+    #
+    # if numpy.count_nonzero(MMarray == -1) < 8:
+    #     for i in range(1, 5):
+    #         if i in MMarray:
+    #             MM = i
+    #             break
+    # else:
+    #     MM = -1
+    #
+    # if numpy.count_nonzero(RMarray == -1) < 8:
+    #     for i in range(1, 5):
+    #         if i in RMarray:
+    #             RM = i
+    #             break
+    # else:
+    #     RM = -1
+    #
+    # if numpy.count_nonzero(LLarray == -1) < 8:
+    #     for i in range(1, 5):
+    #         if i in LLarray:
+    #             LL = i
+    #             break
+    # else:
+    #     LL = -1
+    #
+    # if numpy.count_nonzero(MLarray == -1) < 8:
+    #     for i in range(1, 5):
+    #         if i in MLarray:
+    #             ML = i
+    #             break
+    # else:
+    #     ML = -1
+    #
+    # if numpy.count_nonzero(RLarray == -1) < 8:
+    #     for i in range(1, 5):
+    #         if i in RLarray:
+    #             RL = i
+    #             break
+    # else:
+    #     RL = -1
+    #
+    # solution = [[LU, MU, RU], [LM, MM, RM], [LU, MU, RU]]
+
     print("Solution: ", solution)
     cv2.destroyAllWindows()
     p1.join()
 
     me.move_down(100)
-    me.move_forward(130)
-    me.go_xyz_speed_yaw_mid(0, 0, 110, 100, 0, 4, 3)
+    me.move_forward(140)
+    me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, 4, 3)
+    me.end()
 
 
 # me.go_xyz_speed_mid(0, 0, 115, 100, 2)
@@ -285,39 +393,34 @@ def main():
 #     print("End command received.")
 #     me.end()
 #     cv2.destroyAllWindows()
+lfpad = 1
+lbpad = 2
+mfpad = 3
+mbpad = 4
+rfpad = 5
+rbpad = 6
 
-    height_front = 110
-    height_mid = 145
-    height_back = 175
-
-    lfpad = 1
-    lbpad = 2
-    mfpad = 3
-    mbpad = 4
-    rfpad = 5
-    rbpad = 6
-
-    fdist = 100
-    mdist = 200
-    bdist = 300
-    lateral = 97
-
-    i = 0
-    while i < 4:
+fdist = 100
+mdist = 200
+bdist = 300
+lateral = 97
+i = 0
+'''
+   while i < 4:
         if solution[0][0] == order[i]:
             print("Chose left back")
             me.move_left(lateral)
             me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, lbpad, lfpad)
             me.move_up(height_back - height_front)
             me.move_forward(bdist)
-            me.move_back(bdist)
+            me.move_back(bdist + 10)
             me.move_down(height_back - height_front)
             me.move_right(lateral)
         elif solution[0][1] == order[i]:
             print("Chose middle back")
             me.move_up(height_back - height_front)
             me.move_forward(bdist)
-            me.move_back(bdist)
+            me.move_back(bdist + 10)
             me.move_down(height_back - height_front)
         elif solution[0][2] == order[i]:
             print("Chose right back")
@@ -325,7 +428,7 @@ def main():
             me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, rbpad, rfpad)
             me.move_up(height_back - height_front)
             me.move_forward(bdist)
-            me.move_back(bdist)
+            me.move_back(bdist+10)
             me.move_down(height_back - height_front)
             me.move_left(lateral)
 
@@ -335,14 +438,14 @@ def main():
             me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, lbpad, lfpad)
             me.move_up(height_mid - height_front)
             me.move_forward(mdist)
-            me.move_back(mdist)
+            me.move_back(mdist+10)
             me.move_down(height_mid - height_front)
             me.move_right(lateral)
         elif solution[1][1] == order[i]:
             print("Chose center")
             me.move_up(height_mid - height_front)
             me.move_forward(mdist)
-            me.move_back(mdist)
+            me.move_back(mdist+10)
             me.move_down(height_mid - height_front)
         elif solution[1][2] == order[i]:
             print("Chose right back")
@@ -350,7 +453,7 @@ def main():
             me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, rbpad, rfpad)
             me.move_up(height_mid - height_front)
             me.move_forward(mdist)
-            me.move_back(mdist)
+            me.move_back(mdist+10)
             me.move_down(height_mid - height_front)
             me.move_left(lateral)
 
@@ -359,39 +462,41 @@ def main():
             me.move_left(lateral)
             me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, lbpad, lfpad)
             me.move_forward(fdist)
-            me.move_back(fdist)
+            me.move_back(fdist+10)
             me.move_right(lateral)
         elif solution[2][1] == order[i]:
             print("Chose middle front")
             me.move_forward(fdist)
-            me.move_back(fdist)
+            me.move_back(fdist+10)
         elif solution[2][2] == order[i]:
             print("Chose right front")
             me.move_right(lateral)
             me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, rbpad, rfpad)
             me.move_forward(fdist)
-            me.move_back(fdist)
+            me.move_back(fdist+10)
             me.move_left(lateral)
 
         me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, mbpad, mfpad)
         i += 1
 
-    command = ""
-    while command != "land":
-        frame_read = me.get_frame_read()
-        myFrame = frame_read.frame
-        img = cv2.resize(myFrame, (320, 240))
-        command = landing_frame(img)
-
-        if command == "left":
-            me.move_left(20)
-        elif command == "right":
-            me.move_right(20)
-        elif command == "forward":
-            me.move_forward(20)
+    # command = ""
+    # while command != "land":
+    #     frame_read = me.get_frame_read()
+    #     myFrame = frame_read.frame
+    #     img = cv2.resize(myFrame, (320, 240))
+    #     command = landing_frame(img)
+    #
+    #     if command == "left":
+    #         me.move_left(20)
+    #     elif command == "right":
+    #         me.move_right(20)
+    #     elif command == "forward":
+    #         me.move_forward(20)
 
     me.move_forward(20)
-    me.end()
+    '''
+
+# me.end()
 
 
 # break

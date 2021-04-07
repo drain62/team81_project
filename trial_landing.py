@@ -26,8 +26,9 @@ def drone_setup():
 
 def landing(q, drone):
     i = 0
-    while(i < 10000):
-        time.sleep(0.1)
+    first = True
+    while(i < 1000):
+        time.sleep(3)
         i += 1
 
         frame_read = drone.get_frame_read()
@@ -39,8 +40,8 @@ def landing(q, drone):
         cv2.imshow("Processed Frame", pFrame)
 
         q.put(command)
-        if command == "land":
-            i = 9995
+        if command == "land" and first:
+            return
         if cv2.waitKey(10) & 0xFF == ord('q'):
             cv2.destroyAllWindows()
             break
@@ -58,13 +59,21 @@ def main():
 
     me.takeoff()
 
-    me.go_xyz_speed_yaw_mid(0, 0, 50, 100, 0, 4, 3)
-    me.move_down(20)
+    me.go_xyz_speed_yaw_mid(0, 0, 75, 100, 0, 4, 3)
+    me.move_down(45)
 
     p1.start()
+    copy = ""
     command = ""
     while p1.is_alive() and command != "land":
+        time.sleep(4)
         command = q.get()
+        if copy == command:
+            copy = ""
+            continue
+        elif copy == "":
+            copy = command
+
         if command == "left":
             me.move_left(20)
         elif command == "right":
@@ -73,7 +82,7 @@ def main():
             me.move_forward(20)
 
     p1.join()
-    me.move_forward(20)
+    me.move_forward(55)
     me.end()
 
 
