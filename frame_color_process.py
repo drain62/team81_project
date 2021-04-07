@@ -62,10 +62,10 @@ max_yellow = 0
 flag = 0
 numframes = 5
 
-global control
-control = cv2.imread(r'C:\Users\hfrey\Desktop\controlimage.jpg', cv2.IMREAD_GRAYSCALE)
-control = cv2.resize(control, (int(control.shape[1] / 2), int(control.shape[0] / 2)))
-_, control = cv2.threshold(control, 128, 255, cv2.THRESH_BINARY)
+# global control
+# control = cv2.imread(r'C:\Users\hfrey\Desktop\controlimage.jpg', cv2.IMREAD_GRAYSCALE)
+# control = cv2.resize(control, (int(control.shape[1] / 2), int(control.shape[0] / 2)))
+# _, control = cv2.threshold(control, 128, 255, cv2.THRESH_BINARY)
 
 
 def process_frame(frame, control):
@@ -86,12 +86,12 @@ def process_frame(frame, control):
     gl = colorConvert(green_l)
     gu = colorConvert(green_u)
 
-    red_l = [320, 40, 40]
+    red_l = [320, 30, 30]
     red_u = [360, 100, 100]
     rl = colorConvert(red_l)
     ru = colorConvert(red_u)
 
-    red2_l = [0, 40, 40]
+    red2_l = [0, 30, 30]
     red2_u = [15, 100, 100]
     rl2 = colorConvert(red2_l)
     ru2 = colorConvert(red2_u)
@@ -263,8 +263,8 @@ def process_frame(frame, control):
         # print(d1)
         # approx_b = cv2.approxPolyDP(contour_r, 0.01*cv2.arcLength(contour_r, True), True)
         # if area_r > 750 and len(approx_r) > 15:
-        if d1 < 0.1 and area_r > 300:
-            print(d1)
+        if d1 < 0.15 and area_r > 300:
+            # print(d1)
             cv2.drawContours(imageFrame, contours_r, pic_r, (0, 0, 255), 3)
             M = cv2.moments(contour_r)
             cX = int(M["m10"] / M["m00"])
@@ -352,13 +352,13 @@ def camera(q):
         _, frame = cam.read()
         cv2.imshow("Normal Cam", frame)
         # result, pFrame, bm, gm, ym, rm = process_frame(frame, control)
-        result, pFrame, rm = process_frame(frame, control)
+        result, pFrame = process_frame(frame, control)
         q.put(result)
 
         # print("Results:", result)
         cv2.imshow("Process", pFrame)
         # cv2.imshow("blue", bm)
-        cv2.imshow("red", rm)
+        # cv2.imshow("red", rm)
         # cv2.imshow("yellow", ym)
         # cv2.imshow("green", gm)
         # if q.get() == [1] and thisone:

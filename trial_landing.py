@@ -59,8 +59,8 @@ def main():
 
     me.takeoff()
 
-    me.go_xyz_speed_yaw_mid(0, 0, 50, 100, 0, 4, 3)
-    me.move_down(20)
+    me.go_xyz_speed_yaw_mid(0, 0, 75, 100, 0, 4, 3)
+    me.move_down(45)
 
     p1.start()
     copy = ""
@@ -82,7 +82,7 @@ def main():
             me.move_forward(20)
 
     p1.join()
-    me.move_forward(50)
+    me.move_forward(55)
     me.end()
 
 
