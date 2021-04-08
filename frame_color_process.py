@@ -62,17 +62,10 @@ max_yellow = 0
 flag = 0
 numframes = 5
 
-<<<<<<< HEAD
-global control
-control = cv2.imread('/Users/jamesramirez/Desktop/circle.jpg', cv2.IMREAD_GRAYSCALE)
-control = cv2.resize(control, (int(control.shape[1] / 2), int(control.shape[0] / 2)))
-_, control = cv2.threshold(control, 128, 255, cv2.THRESH_BINARY)
-=======
 # global control
-# control = cv2.imread(r'C:\Users\hfrey\Desktop\controlimage.jpg', cv2.IMREAD_GRAYSCALE)
+# control = cv2.imread('/Users/jamesramirez/Desktop/newcontrol1.jpg', cv2.IMREAD_GRAYSCALE)
 # control = cv2.resize(control, (int(control.shape[1] / 2), int(control.shape[0] / 2)))
 # _, control = cv2.threshold(control, 128, 255, cv2.THRESH_BINARY)
->>>>>>> 52746aca0cc3d1d28b72ce94ab43b381b0c7588e
 
 
 def process_frame(frame, control):

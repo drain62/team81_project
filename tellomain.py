@@ -1,18 +1,15 @@
+from djitellopy import Tello
+from landing_identification import landing_frame
+from frame_color_process import process_frame
+import multiprocessing as mp
+from scipy import stats
+import numpy
 import time
 import cv2
-<<<<<<< HEAD
-# import numpy
-=======
-import numpy
-from scipy import stats
->>>>>>> 21df3ecc3e32317e373adedb5fc9dfbed91ddb2a
-import multiprocessing as mp
-from frame_color_process import process_frame
-from landing_identification import landing_frame
-from djitellopy import Tello
+
 
 global control
-control = cv2.imread(r'C:\Users\hfrey\Desktop\control.jpg', cv2.IMREAD_GRAYSCALE)
+control = cv2.imread('/Users/jamesramirez/Desktop/newcontrol1.jpg', cv2.IMREAD_GRAYSCALE)
 control = cv2.resize(control, (int(control.shape[1] / 2), int(control.shape[0] / 2)))
 _, control = cv2.threshold(control, 128, 255, cv2.THRESH_BINARY)
 global q
@@ -139,7 +136,7 @@ def main():
     # Green - 2
     # Red - 3
     # Yellow - 4
-    order = [3, 4, 1, 2]
+    order = [1, 2, 4, 3]
     LUarray = [-1] * 15
     LUarray = numpy.array(LUarray)
     MUarray = [-1] * 15
@@ -171,7 +168,7 @@ def main():
 
     me.takeoff()
     me.enable_mission_pads()
-    me.set_mission_pad_detection_direction(2)
+    me.set_mission_pad_detection_direction(0)
     p1 = mp.Process(target=camera, args=(q, me))
 
     print("here")
@@ -310,193 +307,328 @@ def main():
     me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, 4, 3)
     me.end()
 
+    # me.go_xyz_speed_mid(0, 0, 115, 100, 2)
+    #
+    # if order[0] == solution[2][0]:
+    #     print("move left")
+    #     print("move forward")
+    #     me.move_left(100)
+    #     me.go_xyz_speed_yaw_mid(0, 0, 110, 100, 0, 4, 3)
+    #     #me.go_xyz_speed_mid(0, 0, 115, 100, 3)
+    #     me.move_forward(100)
+    #     me.move_back(100)
+    #     me.move_right(100)
+    # elif order[0] == solution[2][1]:
+    #     print("move forward")
+    #     me.move_forward(100)
+    #     me.move_back(100)
+    # elif order[0] == solution[2][2]:
+    #     print("move right")
+    #     print("move forward")
+    #     me.move_right(100)
+    #     me.go_xyz_speed_yaw_mid(0, 0, 110, 100, 0, 6, 5)
+    #     # me.go_xyz_speed_mid(0, 0, 115, 100, 4)
+    #     me.move_forward(100)
+    #     me.move_back(100)
+    #     me.move_left(100)
+    #
+    # me.go_xyz_speed_yaw_mid(0, 0, 110, 100, 0, 2, 1)
+    # # me.go_xyz_speed_mid(0, 0, 115, 100, 2)
+    # if order[1] == solution[2][0]:
+    #     print("move left")
+    #     print("move forward")
+    #     me.move_left(100)
+    #     me.go_xyz_speed_yaw_mid(0, 0, 110, 100, 0, 4, 3)
+    #     # me.go_xyz_speed_mid(0, 0, 115, 100, 3)
+    #     me.move_forward(100)
+    #     me.move_back(100)
+    #     me.move_right(100)
+    # elif order[1] == solution[2][1]:
+    #     print("move forward")
+    #     me.move_forward(100)
+    #     me.move_back(100)
+    # elif order[1] == solution[2][2]:
+    #     print("move right")
+    #     print("move forward")
+    #     me.move_right(100)
+    #     me.go_xyz_speed_yaw_mid(0, 0, 110, 100, 0, 6, 5)
+    #     # me.go_xyz_speed_mid(0, 0, 115, 100, 4)
+    #     me.move_forward(100)
+    #     me.move_back(100)
+    #     me.move_left(100)
+    #
+    # me.go_xyz_speed_yaw_mid(0, 0, 110, 100, 0, 2, 1)
+    # # me.go_xyz_speed_mid(0, 0, 115, 100, 2)
+    # if order[2] == solution[2][0]:
+    #     print("move left")
+    #     print("move forward")
+    #     me.move_left(100)
+    #     me.go_xyz_speed_yaw_mid(0, 0, 110, 100, 0, 4, 3)
+    #     # me.go_xyz_speed_mid(0, 0, 115, 100, 3)
+    #     me.move_forward(100)
+    #     me.move_back(100)
+    #     me.move_right(100)
+    # elif order[2] == solution[2][1]:
+    #     print("move forward")
+    #     me.move_forward(100)
+    #     me.move_back(100)
+    # elif order[2] == solution[2][2]:
+    #     print("move right")
+    #     print("move forward")
+    #     me.move_right(100)
+    #     me.go_xyz_speed_yaw_mid(0, 0, 110, 100, 0, 6, 5)
+    #     # me.go_xyz_speed_mid(0, 0, 115, 100, 4)
+    #     me.move_forward(100)
+    #     me.move_back(100)
+    #     me.move_left(100)
+    #
+    # print("\n\nDonezo.")
+    # me.end()
+    #
+    # if cv2.waitKey(10) & 0xFF == ord('q'):
+    #     print("End command received.")
+    #     me.end()
+    #     cv2.destroyAllWindows()
+    lfpad = 1
+    lbpad = 2
+    mfpad = 3
+    mbpad = 4
+    rfpad = 1
+    rbpad = 2
 
-# me.go_xyz_speed_mid(0, 0, 115, 100, 2)
-#
-# if order[0] == solution[2][0]:
-#     print("move left")
-#     print("move forward")
-#     me.move_left(100)
-#     me.go_xyz_speed_yaw_mid(0, 0, 110, 100, 0, 4, 3)
-#     #me.go_xyz_speed_mid(0, 0, 115, 100, 3)
-#     me.move_forward(100)
-#     me.move_back(100)
-#     me.move_right(100)
-# elif order[0] == solution[2][1]:
-#     print("move forward")
-#     me.move_forward(100)
-#     me.move_back(100)
-# elif order[0] == solution[2][2]:
-#     print("move right")
-#     print("move forward")
-#     me.move_right(100)
-#     me.go_xyz_speed_yaw_mid(0, 0, 110, 100, 0, 6, 5)
-#     # me.go_xyz_speed_mid(0, 0, 115, 100, 4)
-#     me.move_forward(100)
-#     me.move_back(100)
-#     me.move_left(100)
-#
-# me.go_xyz_speed_yaw_mid(0, 0, 110, 100, 0, 2, 1)
-# # me.go_xyz_speed_mid(0, 0, 115, 100, 2)
-# if order[1] == solution[2][0]:
-#     print("move left")
-#     print("move forward")
-#     me.move_left(100)
-#     me.go_xyz_speed_yaw_mid(0, 0, 110, 100, 0, 4, 3)
-#     # me.go_xyz_speed_mid(0, 0, 115, 100, 3)
-#     me.move_forward(100)
-#     me.move_back(100)
-#     me.move_right(100)
-# elif order[1] == solution[2][1]:
-#     print("move forward")
-#     me.move_forward(100)
-#     me.move_back(100)
-# elif order[1] == solution[2][2]:
-#     print("move right")
-#     print("move forward")
-#     me.move_right(100)
-#     me.go_xyz_speed_yaw_mid(0, 0, 110, 100, 0, 6, 5)
-#     # me.go_xyz_speed_mid(0, 0, 115, 100, 4)
-#     me.move_forward(100)
-#     me.move_back(100)
-#     me.move_left(100)
-#
-# me.go_xyz_speed_yaw_mid(0, 0, 110, 100, 0, 2, 1)
-# # me.go_xyz_speed_mid(0, 0, 115, 100, 2)
-# if order[2] == solution[2][0]:
-#     print("move left")
-#     print("move forward")
-#     me.move_left(100)
-#     me.go_xyz_speed_yaw_mid(0, 0, 110, 100, 0, 4, 3)
-#     # me.go_xyz_speed_mid(0, 0, 115, 100, 3)
-#     me.move_forward(100)
-#     me.move_back(100)
-#     me.move_right(100)
-# elif order[2] == solution[2][1]:
-#     print("move forward")
-#     me.move_forward(100)
-#     me.move_back(100)
-# elif order[2] == solution[2][2]:
-#     print("move right")
-#     print("move forward")
-#     me.move_right(100)
-#     me.go_xyz_speed_yaw_mid(0, 0, 110, 100, 0, 6, 5)
-#     # me.go_xyz_speed_mid(0, 0, 115, 100, 4)
-#     me.move_forward(100)
-#     me.move_back(100)
-#     me.move_left(100)
-#
-# print("\n\nDonezo.")
-# me.end()
-#
-# if cv2.waitKey(10) & 0xFF == ord('q'):
-#     print("End command received.")
-#     me.end()
-#     cv2.destroyAllWindows()
-lfpad = 1
-lbpad = 2
-mfpad = 3
-mbpad = 4
-rfpad = 5
-rbpad = 6
+    fdist = 100
+    mdist = 200
+    bdist = 300
+    lateral = 97
 
-fdist = 100
-mdist = 200
-bdist = 300
-lateral = 97
-i = 0
-'''
-   while i < 4:
+    i = 0
+    col = 0  # middle column by default (left = -1, right = 1)
+
+    while i < 4:
         if solution[0][0] == order[i]:
             print("Chose left back")
-            me.move_left(lateral)
-            me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, lbpad, lfpad)
-            me.move_up(height_back - height_front)
-            me.move_forward(bdist)
-            me.move_back(bdist + 10)
-            me.move_down(height_back - height_front)
-            me.move_right(lateral)
+            if col == 0:
+                me.move_left(lateral)
+                me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, lbpad, lfpad)
+                me.move_up(height_back - height_front)
+                me.move_forward(bdist)
+                me.move_back(bdist + 10)
+                me.move_down(height_back - height_front)
+            if col == -1:
+                me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, lbpad, lfpad)
+                me.move_up(height_back - height_front)
+                me.move_forward(bdist)
+                me.move_back(bdist + 10)
+                me.move_down(height_back - height_front)
+            if col == 1:
+                me.move_left(2*lateral)
+                # me.move_left(lateral)
+                me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, lbpad, lfpad)
+                me.move_up(height_back - height_front)
+                me.move_forward(bdist)
+                me.move_back(bdist + 10)
+                me.move_down(height_back - height_front)
+            col = -1
+
         elif solution[0][1] == order[i]:
             print("Chose middle back")
-            me.move_up(height_back - height_front)
-            me.move_forward(bdist)
-            me.move_back(bdist + 10)
-            me.move_down(height_back - height_front)
+            if col == 0:
+                me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, mbpad, mfpad)
+                me.move_up(height_back - height_front)
+                me.move_forward(bdist)
+                me.move_back(bdist + 10)
+                me.move_down(height_back - height_front)
+            if col == -1:
+                me.move_right(lateral)
+                me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, mbpad, mfpad)
+                me.move_up(height_back - height_front)
+                me.move_forward(bdist)
+                me.move_back(bdist + 10)
+                me.move_down(height_back - height_front)
+            if col == 1:
+                me.move_left(lateral)
+                me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, mbpad, mfpad)
+                me.move_up(height_back - height_front)
+                me.move_forward(bdist)
+                me.move_back(bdist + 10)
+                me.move_down(height_back - height_front)
+            col = 0
+
         elif solution[0][2] == order[i]:
             print("Chose right back")
-            me.move_right(lateral)
-            me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, rbpad, rfpad)
-            me.move_up(height_back - height_front)
-            me.move_forward(bdist)
-            me.move_back(bdist+10)
-            me.move_down(height_back - height_front)
-            me.move_left(lateral)
+            if col == 0:
+                me.move_right(lateral)
+                me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, rbpad, rfpad)
+                me.move_up(height_back - height_front)
+                me.move_forward(bdist)
+                me.move_back(bdist+10)
+                me.move_down(height_back - height_front)
+            if col == -1:
+                me.move_right(lateral)
+                me.move_right(lateral)
+                me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, rbpad, rfpad)
+                me.move_up(height_back - height_front)
+                me.move_forward(bdist)
+                me.move_back(bdist+10)
+                me.move_down(height_back - height_front)
+            if col == 1:
+                me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, rbpad, rfpad)
+                me.move_up(height_back - height_front)
+                me.move_forward(bdist)
+                me.move_back(bdist+10)
+                me.move_down(height_back - height_front)
+            col = 1
 
         elif solution[1][0] == order[i]:
             print("Chose left middle")
-            me.move_left(lateral)
-            me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, lbpad, lfpad)
-            me.move_up(height_mid - height_front)
-            me.move_forward(mdist)
-            me.move_back(mdist+10)
-            me.move_down(height_mid - height_front)
-            me.move_right(lateral)
+            if col == 0:
+                me.move_left(lateral)
+                me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, lbpad, lfpad)
+                me.move_up(height_mid - height_front)
+                me.move_forward(mdist)
+                me.move_back(mdist+10)
+                me.move_down(height_mid - height_front)
+            if col == -1:
+                me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, lbpad, lfpad)
+                me.move_up(height_mid - height_front)
+                me.move_forward(mdist)
+                me.move_back(mdist+10)
+                me.move_down(height_mid - height_front)
+            if col == 1:
+                me.move_left(lateral)
+                me.move_left(lateral)
+                me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, lbpad, lfpad)
+                me.move_up(height_mid - height_front)
+                me.move_forward(mdist)
+                me.move_back(mdist+10)
+                me.move_down(height_mid - height_front)
+            col = -1
+
         elif solution[1][1] == order[i]:
             print("Chose center")
-            me.move_up(height_mid - height_front)
-            me.move_forward(mdist)
-            me.move_back(mdist+10)
-            me.move_down(height_mid - height_front)
+            if col == 0:
+                me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, mbpad, mfpad)
+                me.move_up(height_mid - height_front)
+                me.move_forward(mdist)
+                me.move_back(mdist+10)
+                me.move_down(height_mid - height_front)
+            if col == -1:
+                me.move_right(lateral)
+                me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, mbpad, mfpad)
+                me.move_up(height_mid - height_front)
+                me.move_forward(mdist)
+                me.move_back(mdist+10)
+                me.move_down(height_mid - height_front)
+            if col == 1:
+                me.move_left(lateral)
+                me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, mbpad, mfpad)
+                me.move_up(height_mid - height_front)
+                me.move_forward(mdist)
+                me.move_back(mdist+10)
+                me.move_down(height_mid - height_front)
+            col = 0
+
         elif solution[1][2] == order[i]:
             print("Chose right back")
-            me.move_right(lateral)
-            me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, rbpad, rfpad)
-            me.move_up(height_mid - height_front)
-            me.move_forward(mdist)
-            me.move_back(mdist+10)
-            me.move_down(height_mid - height_front)
-            me.move_left(lateral)
+            if col == 0:
+                me.move_right(lateral)
+                me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, rbpad, rfpad)
+                me.move_up(height_mid - height_front)
+                me.move_forward(mdist)
+                me.move_back(mdist+10)
+                me.move_down(height_mid - height_front)
+            if col == -1:
+                me.move_right(lateral)
+                me.move_right(lateral)
+                me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, rbpad, rfpad)
+                me.move_up(height_mid - height_front)
+                me.move_forward(mdist)
+                me.move_back(mdist+10)
+                me.move_down(height_mid - height_front)
+            if col == 1:
+                me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, rbpad, rfpad)
+                me.move_up(height_mid - height_front)
+                me.move_forward(mdist)
+                me.move_back(mdist+10)
+                me.move_down(height_mid - height_front)
+            col = 1
 
         elif solution[2][0] == order[i]:
             print("Chose left front")
-            me.move_left(lateral)
-            me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, lbpad, lfpad)
-            me.move_forward(fdist)
-            me.move_back(fdist+10)
-            me.move_right(lateral)
+            if col == 0:
+                me.move_left(lateral)
+                me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, lbpad, lfpad)
+                me.move_forward(fdist)
+                me.move_back(fdist+10)
+            if col == -1:
+                me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, lbpad, lfpad)
+                me.move_forward(fdist)
+                me.move_back(fdist+10)
+            if col == 1:
+                me.move_left(lateral)
+                me.move_left(lateral)
+                me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, lbpad, lfpad)
+                me.move_forward(fdist)
+                me.move_back(fdist+10)
+            col = -1
+
         elif solution[2][1] == order[i]:
             print("Chose middle front")
-            me.move_forward(fdist)
-            me.move_back(fdist+10)
+            if col == 0:
+                me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, mbpad, mfpad)
+                me.move_forward(fdist)
+                me.move_back(fdist+10)
+            if col == -1:
+                me.move_right(lateral)
+                me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, mbpad, mfpad)
+                me.move_forward(fdist)
+                me.move_back(fdist+10)
+            if col == 1:
+                me.move_left(lateral)
+                me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, mbpad, mfpad)
+                me.move_forward(fdist)
+                me.move_back(fdist+10)
+            col = 0
+
         elif solution[2][2] == order[i]:
             print("Chose right front")
-            me.move_right(lateral)
-            me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, rbpad, rfpad)
-            me.move_forward(fdist)
-            me.move_back(fdist+10)
-            me.move_left(lateral)
+            if col == 0:
+                me.move_right(lateral)
+                me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, rbpad, rfpad)
+                me.move_forward(fdist)
+                me.move_back(fdist+10)
+            if col == -1:
+                me.move_right(lateral)
+                me.move_right(lateral)
+                me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, rbpad, rfpad)
+                me.move_forward(fdist)
+                me.move_back(fdist+10)
+            if col == 1:
+                me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, rbpad, rfpad)
+                me.move_forward(fdist)
+                me.move_back(fdist+10)
+            col = 1
 
-        me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, mbpad, mfpad)
+        # me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, mbpad, mfpad)
         i += 1
 
-    # command = ""
-    # while command != "land":
-    #     frame_read = me.get_frame_read()
-    #     myFrame = frame_read.frame
-    #     img = cv2.resize(myFrame, (320, 240))
-    #     command = landing_frame(img)
-    #
-    #     if command == "left":
-    #         me.move_left(20)
-    #     elif command == "right":
-    #         me.move_right(20)
-    #     elif command == "forward":
-    #         me.move_forward(20)
+        # command = ""
+        # while command != "land":
+        #     frame_read = me.get_frame_read()
+        #     myFrame = frame_read.frame
+        #     img = cv2.resize(myFrame, (320, 240))
+        #     command = landing_frame(img)
+        #
+        #     if command == "left":
+        #         me.move_left(20)
+        #     elif command == "right":
+        #         me.move_right(20)
+        #     elif command == "forward":
+        #         me.move_forward(20)
+        #
+        # me.move_forward(20)
 
-    me.move_forward(20)
-    '''
-
-# me.end()
+    me.end()
 
 
 # break
