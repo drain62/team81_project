@@ -86,12 +86,12 @@ def process_frame(frame, control):
     gl = colorConvert(green_l)
     gu = colorConvert(green_u)
 
-    red_l = [320, 30, 30]
+    red_l = [280, 20, 20]
     red_u = [360, 100, 100]
     rl = colorConvert(red_l)
     ru = colorConvert(red_u)
 
-    red2_l = [0, 30, 30]
+    red2_l = [0, 20, 20]
     red2_u = [15, 100, 100]
     rl2 = colorConvert(red2_l)
     ru2 = colorConvert(red2_u)
@@ -133,7 +133,7 @@ def process_frame(frame, control):
 
     lineX = int(width/3) + 20
     twolineX = int(width * 2/3) - 20
-    lineY = int(height/3)
+    lineY = int(height/3) + 5
     twolineY = int(height * 2/3) - 25
 
     hsvFrame = cv2.cvtColor(imageFrame, cv2.COLOR_BGR2HSV)
