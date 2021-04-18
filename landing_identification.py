@@ -98,15 +98,6 @@ def landing_frame(frame):
     yl = colorConvert(yellow_l)
     yu = colorConvert(yellow_u)
 
-    # bl = [197, 21, 43]
-    # bu = [203, 99, 60]
-    # gl = [126, 52, 53]
-    # gu = [143, 100, 80]
-    # rl = [4, 72, 72]
-    # ru = [7, 96, 91]
-    # yl = [51, 67, 73]
-    # yu = [53, 100, 93]
-
     blue_lower = np.array(bl, np.uint8)
     blue_upper = np.array(bu, np.uint8)
     green_lower = np.array(gl, np.uint8)
@@ -167,11 +158,6 @@ def landing_frame(frame):
     contours_y, hierarchy_y = cv2.findContours(yellow_mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     # for each contour, if it's large enough draw them onto the image
 
-    # contours_b = np.array(contours_b, np.uint32)
-    # contours_g = np.array(contours_g, np.uint32)
-    # contours_r = np.array(contours_r, np.uint32)
-    # contours_y = np.array(contours_y, np.uint32)
-
     allColors = []
     allColors.extend(contours_b)
     allColors.extend(contours_g)
@@ -183,12 +169,12 @@ def landing_frame(frame):
 
     for pic_b, contour_b in enumerate(contours_b):
         area = cv2.contourArea(contour_b)
-        if area > 50:
+        if area > 5:
+            cv2.drawContours(imageFrame, contour_b, -1, (0, 0, 255), 3)
             M = cv2.moments(contour_b)
             cX = int(M["m10"] / M["m00"])
             cY = int(M["m01"] / M["m00"])
 
-            # cv2.drawContours(imageFrame, found_contour, -1, (255, 255, 255), 3)
             cv2.circle(imageFrame, (cX, cY), 7, (255, 255, 255), -1)
 
             if cY <= lineY:
@@ -205,87 +191,100 @@ def landing_frame(frame):
                     move = "right"
                 else:
                     move = "land"
-            cv2.drawContours(imageFrame, contour_b, -1, (0, 0, 255), 3)
-    #         if area >= biggest_blue:
-    #             biggest_blue = area
-    #             found_blue = contour_b
-    #         cv2.drawContours(imageFrame, contour_b, -1, (255, 0, 0), 3)
-
-    biggest_green = 0
-    for pic_g, contour_g in enumerate(contours_g):
-        area = cv2.contourArea(contour_g)
-
-        # if area > 50 and area < 10000:
-        #     if area >= biggest_green:
-        #         biggest_green = area
-        #         found_green = contour_g
-        cv2.drawContours(imageFrame, contour_g, -1, (0, 255, 0), 3)
-        M = cv2.moments(contour_g)
-        cX = int(M["m10"] / M["m00"])
-        cY = int(M["m01"] / M["m00"])
-        if cY <= lineY:
-            if cX < lineX:
-                move = "left"
-            elif cX > twolineX:
-                move = "right"
-            else:
-                move = "forward"
-        else:
-            if cX < lineX:
-                move = "left"
-            elif cX > twolineX:
-                move = "right"
-            else:
-                move = "land"
-
-        # cv2.drawContours(imageFrame, found_contour, -1, (255, 255, 255), 3)
-        cv2.circle(imageFrame, (cX, cY), 7, (255, 255, 255), -1)
 
     if move == "land":
         return [move, imageFrame]
-    biggest_red = 0
+
+    for pic_g, contour_g in enumerate(contours_g):
+        area = cv2.contourArea(contour_g)
+        if area > 5:
+            cv2.drawContours(imageFrame, contour_g, -1, (0, 255, 0), 3)
+            M = cv2.moments(contour_g)
+            cX = int(M["m10"] / M["m00"])
+            cY = int(M["m01"] / M["m00"])
+            cv2.circle(imageFrame, (cX, cY), 7, (255, 255, 255), -1)
+
+            if cY <= lineY:
+                if cX < lineX:
+                    move = "left"
+                elif cX > twolineX:
+                    move = "right"
+                else:
+                    move = "forward"
+            else:
+                if cX < lineX:
+                    move = "left"
+                elif cX > twolineX:
+                    move = "right"
+                else:
+                    move = "land"
+
+            cv2.circle(imageFrame, (cX, cY), 7, (255, 255, 255), -1)
+
+    if move == "land":
+        return [move, imageFrame]
+
     for pic_r, contour_r in enumerate(contours_r):
         area = cv2.contourArea(contour_r)
 
-        # if area > 50 and area < 10000:
-        #     if area >= biggest_red:
-        #         biggest_red = area
-        #         found_red = contour_r
-        M = cv2.moments(contour_r)
-        cX = int(M["m10"] / M["m00"])
-        cY = int(M["m01"] / M["m00"])
+        if area > 5:
+            cv2.drawContours(imageFrame, contour_r, -1, (0, 0, 255), 3)
+            M = cv2.moments(contour_r)
+            cX = int(M["m10"] / M["m00"])
+            cY = int(M["m01"] / M["m00"])
 
-        # cv2.drawContours(imageFrame, found_contour, -1, (255, 255, 255), 3)
-        cv2.circle(imageFrame, (cX, cY), 7, (255, 255, 255), -1)
+            cv2.circle(imageFrame, (cX, cY), 7, (255, 255, 255), -1)
 
-        if cY <= lineY:
-            if cX < lineX:
-                move = "left"
-            elif cX > twolineX:
-                move = "right"
+            if cY <= lineY:
+                if cX < lineX:
+                    move = "left"
+                elif cX > twolineX:
+                    move = "right"
+                else:
+                    move = "forward"
             else:
-                move = "forward"
-        else:
-            if cX < lineX:
-                move = "left"
-            elif cX > twolineX:
-                move = "right"
-            else:
-                move = "land"
-        cv2.drawContours(imageFrame, contour_r, -1, (0, 0, 255), 3)
+                if cX < lineX:
+                    move = "left"
+                elif cX > twolineX:
+                    move = "right"
+                else:
+                    move = "land"
+
     if move == "land":
         return [move, imageFrame]
 
-    biggest_yellow = 0
     # for pic_y, contour_y in enumerate(contours_y):
     #     area = cv2.contourArea(contour_y)
     #
-    #     if area > 200 and area < 1000:
-    #         if area >= biggest_yellow:
-    #             biggest_yellow = area
-    #             found_yellow = contour_y
+    #     if area > 10:
     #         cv2.drawContours(imageFrame, contour_y, pic_y, (125, 125, 255), 3)
+    #         M = cv2.moments(contour_y)
+    #         cX = int(M["m10"] / M["m00"])
+    #         cY = int(M["m01"] / M["m00"])
+    #
+    #         cv2.circle(imageFrame, (cX, cY), 7, (255, 255, 255), -1)
+    #
+    #         if cY <= lineY:
+    #             if cX < lineX:
+    #                 move = "left"
+    #             elif cX > twolineX:
+    #                 move = "right"
+    #             else:
+    #                 move = "forward"
+    #         else:
+    #             if cX < lineX:
+    #                 move = "left"
+    #             elif cX > twolineX:
+    #                 move = "right"
+    #             else:
+    #                 move = "land"
 
+    cv2.line(imageFrame, (lineX, 0), (lineX, height), (255, 255, 255), 3)
+    cv2.line(imageFrame, (twolineX, 0), (twolineX, height), (255, 255, 255), 3)
+
+    cv2.line(imageFrame, (0, lineY), (width, lineY), (255, 255, 255), 3)
+
+    return [move, imageFrame]
     # move = ""
     # biggest = 0
     # areas = [biggest_blue, biggest_green, biggest_red, biggest_yellow]
@@ -324,13 +323,6 @@ def landing_frame(frame):
     #             move = "right"
     #         else:
     #             move = "land"
-
-    cv2.line(imageFrame, (lineX, 0), (lineX, height), (255, 255, 255), 3)
-    cv2.line(imageFrame, (twolineX, 0), (twolineX, height), (255, 255, 255), 3)
-
-    cv2.line(imageFrame, (0, lineY), (width, lineY), (255, 255, 255), 3)
-
-    return [move, imageFrame]
 
 
 def camera(q):

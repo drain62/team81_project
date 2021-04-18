@@ -60,7 +60,7 @@ def camera(q, drone):
 def landing(l, drone):
     i = 0
     while(i < 100):
-        time.sleep(1)
+        # time.sleep(2)
         i += 1
 
         frame_read = drone.get_frame_read()
@@ -73,10 +73,11 @@ def landing(l, drone):
 
         l.put(command)
         if command == "land":
-            return
+            break
         if cv2.waitKey(10) & 0xFF == ord('q'):
             cv2.destroyAllWindows()
             break
+    return
 
 
 ###############################################################################
@@ -90,7 +91,7 @@ def main():
     # Green - 2
     # Red - 3
     # Yellow - 4
-    order = [3, 2, 4, 1]
+    order = [1, 3, 2, 4]
     LUarray = [-1] * 15
     LUarray = numpy.array(LUarray)
     MUarray = [-1] * 15
@@ -161,96 +162,6 @@ def main():
 
     solution = [[results[0], results[1], results[2]], [results[3], results[4],
                                                        results[5]], [results[6], results[7], results[8]]]
-
-    # modeLU = stats.mode(LUarray)
-    # modeMU = stats.mode(MUarray)
-    # modeRU = stats.mode(RUarray)
-    #
-    # modeLM = stats.mode(LMarray)
-    # modeMM = stats.mode(MMarray)
-    # modeRM = stats.mode(RMarray)
-    #
-    # modeLL = stats.mode(LLarray)
-    # modeML = stats.mode(MLarray)
-    # modeRL = stats.mode(RLarray)
-    # solution = [[int(modeLU[0]), int(modeMU[0]), int(modeRU[0])], [int(modeLM[0]), int(
-    #     modeMM[0]), int(modeRM[0])], [int(modeLL[0]), int(modeML[0]), int(modeRL[0])]]
-    #
-    #
-    #
-    # if numpy.count_nonzero(LUarray == -1) < 8:
-    #     for i in range(1, 5):
-    #         if i in LUarray:
-    #             LU = i
-    #             break
-    # else:
-    #     LU = -1
-    #
-    # if numpy.count_nonzero(MUarray == -1) < 8:
-    #     for i in range(1, 5):
-    #         if i in MUarray:
-    #             MU = i
-    #             break
-    # else:
-    #     MU = -1
-    #
-    # if numpy.count_nonzero(RUarray == -1) < 8:
-    #     for i in range(1, 5):
-    #         if i in RUarray:
-    #             RU = i
-    #             break
-    # else:
-    #     RU = -1
-    #
-    # if numpy.count_nonzero(LMarray == -1) < 8:
-    #     for i in range(1, 5):
-    #         if i in LMarray:
-    #             LM = i
-    #             break
-    # else:
-    #     LM = -1
-    #
-    # if numpy.count_nonzero(MMarray == -1) < 8:
-    #     for i in range(1, 5):
-    #         if i in MMarray:
-    #             MM = i
-    #             break
-    # else:
-    #     MM = -1
-    #
-    # if numpy.count_nonzero(RMarray == -1) < 8:
-    #     for i in range(1, 5):
-    #         if i in RMarray:
-    #             RM = i
-    #             break
-    # else:
-    #     RM = -1
-    #
-    # if numpy.count_nonzero(LLarray == -1) < 8:
-    #     for i in range(1, 5):
-    #         if i in LLarray:
-    #             LL = i
-    #             break
-    # else:
-    #     LL = -1
-    #
-    # if numpy.count_nonzero(MLarray == -1) < 8:
-    #     for i in range(1, 5):
-    #         if i in MLarray:
-    #             ML = i
-    #             break
-    # else:
-    #     ML = -1
-    #
-    # if numpy.count_nonzero(RLarray == -1) < 8:
-    #     for i in range(1, 5):
-    #         if i in RLarray:
-    #             RL = i
-    #             break
-    # else:
-    #     RL = -1
-    #
-    # solution = [[LU, MU, RU], [LM, MM, RM], [LU, MU, RU]]
 
     print("Solution: ", solution)
     cv2.destroyAllWindows()
@@ -351,8 +262,8 @@ def main():
     rbpad = 2
 
     fdist = 115
-    mdist = 220
-    bdist = 315
+    mdist = 225
+    bdist = 320
     lateral = 105
     i = 0
 
@@ -441,13 +352,13 @@ def main():
                 me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, lbpad, lfpad)
                 me.move_up(height_back - height_front)
                 me.move_forward(bdist)
-                me.move_back(bdist + 15)
+                me.move_back(bdist + 10)
                 me.move_down(height_back - height_front)
             if col == -1:
                 me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, lbpad, lfpad)
                 me.move_up(height_back - height_front)
                 me.move_forward(bdist)
-                me.move_back(bdist + 15)
+                me.move_back(bdist + 10)
                 me.move_down(height_back - height_front)
             if col == 1:
                 me.move_left(2*lateral)
@@ -455,7 +366,7 @@ def main():
                 me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, lbpad, lfpad)
                 me.move_up(height_back - height_front)
                 me.move_forward(bdist)
-                me.move_back(bdist + 15)
+                me.move_back(bdist + 10)
                 me.move_down(height_back - height_front)
             col = -1
 
@@ -465,21 +376,21 @@ def main():
                 me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, mbpad, mfpad)
                 me.move_up(height_back - height_front)
                 me.move_forward(bdist)
-                me.move_back(bdist + 15)
+                me.move_back(bdist + 10)
                 me.move_down(height_back - height_front)
             if col == -1:
                 me.move_right(lateral)
                 me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, mbpad, mfpad)
                 me.move_up(height_back - height_front)
                 me.move_forward(bdist)
-                me.move_back(bdist + 15)
+                me.move_back(bdist + 10)
                 me.move_down(height_back - height_front)
             if col == 1:
                 me.move_left(lateral)
                 me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, mbpad, mfpad)
                 me.move_up(height_back - height_front)
                 me.move_forward(bdist)
-                me.move_back(bdist + 15)
+                me.move_back(bdist + 10)
                 me.move_down(height_back - height_front)
             col = 0
 
@@ -490,20 +401,20 @@ def main():
                 me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, rbpad, rfpad)
                 me.move_up(height_back - height_front)
                 me.move_forward(bdist)
-                me.move_back(bdist+15)
+                me.move_back(bdist+10)
                 me.move_down(height_back - height_front)
             if col == -1:
                 me.move_right(2*lateral)
                 me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, rbpad, rfpad)
                 me.move_up(height_back - height_front)
                 me.move_forward(bdist)
-                me.move_back(bdist+15)
+                me.move_back(bdist+10)
                 me.move_down(height_back - height_front)
             if col == 1:
                 me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, rbpad, rfpad)
                 me.move_up(height_back - height_front)
                 me.move_forward(bdist)
-                me.move_back(bdist+15)
+                me.move_back(bdist+10)
                 me.move_down(height_back - height_front)
             col = 1
 
@@ -514,20 +425,20 @@ def main():
                 me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, lbpad, lfpad)
                 me.move_up(height_mid - height_front)
                 me.move_forward(mdist)
-                me.move_back(mdist+15)
+                me.move_back(mdist+10)
                 me.move_down(height_mid - height_front)
             if col == -1:
                 me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, lbpad, lfpad)
                 me.move_up(height_mid - height_front)
                 me.move_forward(mdist)
-                me.move_back(mdist+15)
+                me.move_back(mdist+10)
                 me.move_down(height_mid - height_front)
             if col == 1:
                 me.move_left(2*lateral)
                 me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, lbpad, lfpad)
                 me.move_up(height_mid - height_front)
                 me.move_forward(mdist)
-                me.move_back(mdist+15)
+                me.move_back(mdist+10)
                 me.move_down(height_mid - height_front)
             col = -1
 
@@ -537,21 +448,21 @@ def main():
                 me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, mbpad, mfpad)
                 me.move_up(height_mid - height_front)
                 me.move_forward(mdist)
-                me.move_back(mdist+15)
+                me.move_back(mdist+10)
                 me.move_down(height_mid - height_front)
             if col == -1:
                 me.move_right(lateral)
                 me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, mbpad, mfpad)
                 me.move_up(height_mid - height_front)
                 me.move_forward(mdist)
-                me.move_back(mdist+15)
+                me.move_back(mdist+10)
                 me.move_down(height_mid - height_front)
             if col == 1:
                 me.move_left(lateral)
                 me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, mbpad, mfpad)
                 me.move_up(height_mid - height_front)
                 me.move_forward(mdist)
-                me.move_back(mdist+15)
+                me.move_back(mdist+10)
                 me.move_down(height_mid - height_front)
             col = 0
 
@@ -562,20 +473,20 @@ def main():
                 me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, rbpad, rfpad)
                 me.move_up(height_mid - height_front)
                 me.move_forward(mdist)
-                me.move_back(mdist+15)
+                me.move_back(mdist+10)
                 me.move_down(height_mid - height_front)
             if col == -1:
                 me.move_right(2*lateral)
                 me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, rbpad, rfpad)
                 me.move_up(height_mid - height_front)
                 me.move_forward(mdist)
-                me.move_back(mdist+15)
+                me.move_back(mdist+10)
                 me.move_down(height_mid - height_front)
             if col == 1:
                 me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, rbpad, rfpad)
                 me.move_up(height_mid - height_front)
                 me.move_forward(mdist)
-                me.move_back(mdist+15)
+                me.move_back(mdist+10)
                 me.move_down(height_mid - height_front)
             col = 1
 
@@ -585,16 +496,16 @@ def main():
                 me.move_left(lateral)
                 me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, lbpad, lfpad)
                 me.move_forward(fdist)
-                me.move_back(fdist+15)
+                me.move_back(fdist+10)
             if col == -1:
                 me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, lbpad, lfpad)
                 me.move_forward(fdist)
-                me.move_back(fdist+15)
+                me.move_back(fdist+10)
             if col == 1:
                 me.move_left(2*lateral)
                 me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, lbpad, lfpad)
                 me.move_forward(fdist)
-                me.move_back(fdist+15)
+                me.move_back(fdist+10)
             col = -1
 
         elif solution[2][1] == order[i]:
@@ -602,17 +513,17 @@ def main():
             if col == 0:
                 me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, mbpad, mfpad)
                 me.move_forward(fdist)
-                me.move_back(fdist+15)
+                me.move_back(fdist+10)
             if col == -1:
                 me.move_right(lateral)
                 me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, mbpad, mfpad)
                 me.move_forward(fdist)
-                me.move_back(fdist+15)
+                me.move_back(fdist+10)
             if col == 1:
                 me.move_left(lateral)
                 me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, mbpad, mfpad)
                 me.move_forward(fdist)
-                me.move_back(fdist+15)
+                me.move_back(fdist+10)
             col = 0
 
         elif solution[2][2] == order[i]:
@@ -621,16 +532,16 @@ def main():
                 me.move_right(lateral)
                 me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, rbpad, rfpad)
                 me.move_forward(fdist)
-                me.move_back(fdist+15)
+                me.move_back(fdist+10)
             if col == -1:
                 me.move_right(2*lateral)
                 me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, rbpad, rfpad)
                 me.move_forward(fdist)
-                me.move_back(fdist+15)
+                me.move_back(fdist+10)
             if col == 1:
                 me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, rbpad, rfpad)
                 me.move_forward(fdist)
-                me.move_back(fdist+15)
+                me.move_back(fdist+10)
             col = 1
 
         # me.go_xyz_speed_yaw_mid(0, 0, height_front, 100, 0, mbpad, mfpad)
@@ -641,71 +552,62 @@ def main():
     elif col == -1:
         me.move_right(lateral)
 
-    # command = ""
-    # while command != "land":
-    #     frame_read = me.get_frame_read()
-    #     myFrame = frame_read.frame
-    #     img = cv2.resize(myFrame, (320, 240))
-    #     command = landing_frame(img)
-    #
-    #     if command == "left":
-    #         me.move_left(20)
-    #     elif command == "right":
-    #         me.move_right(20)
-    #     elif command == "forward":
-    #         me.move_forward(20)
-
     p2 = mp.Process(target=landing, args=(l, me))
     me.move_down(30)
     me.go_xyz_speed_yaw_mid(0, 0, 75, 100, 0, 4, 3)
     me.move_down(45)
-    me.move_forward(100)
+    me.move_forward(120)
     p2.start()
-    copy = ""
+
     command = ""
     j = 0
     done = False
+    first = True
     while p2.is_alive() and j < 4:
-        # time.sleep(6)
-
-        # if copy == command:
-        #     copy = ""
-        #     continue
-        # elif copy == "":
-        #     copy = command
-        #
-        # if command == "left":
-        #     me.move_left(20)
-        # elif command == "right":
-        #     me.move_right(20)
-        # elif command == "forward":
-        #     me.move_forward(20)
         i = 0
-
-        while i < 7:
-            me.move_left(20)
+        if first:
+            while i < 5:
+                time.sleep(0.5)
+                me.move_left(30)
+                command = l.get()
+                if command == "land" or not p2.is_alive():
+                    done = True
+                    break
+                i += 1
+            first = False
+            if done:
+                print("done")
+                j = 4
+                break
+        else:
+            while i < 10:
+                time.sleep(0.5)
+                me.move_left(30)
+                command = l.get()
+                if command == "land" or not p2.is_alive():
+                    done = True
+                    break
+                i += 1
+            if done:
+                print("done")
+                j = 4
+                break
+        i = 0
+        me.move_forward(50)
+        while i < 10:
+            time.sleep(0.5)
+            me.move_right(30)
             command = l.get()
-            if command == "land":
+            if command == "land" or not p2.is_alive():
                 done = True
                 break
             i += 1
         if done:
-            j = 4
-            break
-        i = 0
-        me.move_forward(40)
-        while i < 14:
-            me.move_right(20)
-            command = l.get()
-            if command == "land":
-                done = True
-                break
-            i += 1
-        if done:
+            print("done")
             j = 4
             break
 
-        me.move_forward(40)
+        me.move_forward(50)
         j += 1
 
     p2.join()

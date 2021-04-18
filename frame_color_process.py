@@ -24,6 +24,11 @@ Steps:
 global q
 q = mp.Queue()
 
+global control
+control = cv2.imread(r'C:\Users\hfrey\Desktop\newcontrol1.jpg', cv2.IMREAD_GRAYSCALE)
+control = cv2.resize(control, (int(control.shape[1] / 2), int(control.shape[0] / 2)))
+_, control = cv2.threshold(control, 128, 255, cv2.THRESH_BINARY)
+
 
 def colorConvert(a):
     # possible threshold use
@@ -81,7 +86,7 @@ def process_frame(frame, control):
     bl = colorConvert(blue_l)
     bu = colorConvert(blue_u)
 
-    green_l = [80, 40, 40]
+    green_l = [70, 30, 30]
     green_u = [180, 100, 100]
     gl = colorConvert(green_l)
     gu = colorConvert(green_u)
@@ -99,7 +104,7 @@ def process_frame(frame, control):
     rgb_red_l = [260, 0, 0]
     rgb_red_u = [360, 100, 100]
 
-    yellow_l = [50, 50, 60]
+    yellow_l = [50, 40, 50]
     yellow_u = [75, 100, 100]
     yl = colorConvert(yellow_l)
     yu = colorConvert(yellow_u)
@@ -263,7 +268,7 @@ def process_frame(frame, control):
         # print(d1)
         # approx_b = cv2.approxPolyDP(contour_r, 0.01*cv2.arcLength(contour_r, True), True)
         # if area_r > 750 and len(approx_r) > 15:
-        if d1 < 0.15 and area_r > 300:
+        if d1 < 0.2 and area_r > 250:
             # print(d1)
             cv2.drawContours(imageFrame, contours_r, pic_r, (0, 0, 255), 3)
             M = cv2.moments(contour_r)
@@ -338,7 +343,7 @@ def process_frame(frame, control):
 
     cv2.line(imageFrame, (0, lineY), (width, lineY), (255, 255, 255), 3)
     cv2.line(imageFrame, (0, twolineY), (width, twolineY), (255, 255, 255), 3)
-    return [results, imageFrame]
+    return [results, imageFrame, blue_mask]
     # return [results, imageFrame]
 
 
@@ -352,12 +357,12 @@ def camera(q):
         _, frame = cam.read()
         cv2.imshow("Normal Cam", frame)
         # result, pFrame, bm, gm, ym, rm = process_frame(frame, control)
-        result, pFrame = process_frame(frame, control)
+        result, pFrame, bm = process_frame(frame, control)
         q.put(result)
 
         # print("Results:", result)
         cv2.imshow("Process", pFrame)
-        # cv2.imshow("blue", bm)
+        cv2.imshow("blue", bm)
         # cv2.imshow("red", rm)
         # cv2.imshow("yellow", ym)
         # cv2.imshow("green", gm)
